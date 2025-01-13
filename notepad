@@ -1,0 +1,59 @@
+### Script Goals
+
+Version 1.0
+- Sign In [x]
+- Solidify structure and tests [x]
+Decide to go sequently instead of concorrently to imitate human behavio  ur
+- Search specific jobs [] -- Hardest Part because i need to decide most efficient search method, filter by country, post date, And cant contain certain words like senior, experienced etc.
+
+Version XXX
+------
+- Identify application type []
+- Send fast CVS
+-- Auto complete most info []
+- Open Slow CVS links []
+
+
+
+def search_jobs_for_country(self, country_name: str, job_titles: tuple):
+        try:
+            self.country = country_name
+            logging.info(f"Starting job search for {country_name}")
+
+            # Visit the job search page for the country (LinkedIn job search interface)
+            self.page.goto(self.page_url)
+            self.page.wait_for_load_state("networkidle", timeout=15000)
+            
+            for job_title in job_titles:
+                logging.info(f"Searching for '{job_title}' in '{country_name}'")
+
+                # Fill in the search fields for job title and location (country)
+                search_box = self.page.locator(self.search_box_locator)
+                search_box.fill(job_title)
+                
+                location_box = self.page.locator(self.location_box_locator)
+                location_box.fill(country_name)
+                
+                # Trigger the search by pressing 'Enter' or clicking the search button
+                search_box.press("Enter")
+                self.page.wait_for_load_state("networkidle", timeout=15000)
+
+                # Find all job elements listed after the search
+                job_elements = self.page.locator(self.job_elements_locator)
+                job_count = job_elements.count()
+                logging.info(f"Found {job_count} job(s) for '{job_title}' in {country_name}.")
+
+                # Open a new tab for each job matching the title (uncomment this block to enable it)
+                for i in range(job_count):
+                    job_name = job_elements.nth(i).locator("h3").inner_text()
+                    if job_title.lower() in job_name.lower():  # Case-insensitive match
+                        job_link = job_elements.nth(i).locator("a").get_attribute("href")
+                        logging.info(f"Found job: {job_name}, opening {job_link}...")
+                        
+                        # Open a new tab with the job link (this part of the code is commented for testing)
+                        new_tab = self.page.context.new_page()
+                        new_tab.goto(job_link)
+                        time.sleep(2)  # Adding a slight delay to avoid overloading requests
+                        new_tab.close()
+
+
