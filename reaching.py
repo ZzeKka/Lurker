@@ -9,7 +9,7 @@ used_application = []
 
 # Constant tuples
 countries = ("Switzerland", "Portugal")
-job_titles = ("Python Developer")
+job_titles = ("Python Developer","Software Developer")
 
 context_number = 0
 
@@ -35,7 +35,7 @@ def run(playwright: Playwright) -> None:
         job_search_page = country_context.new_page()
         # Creating object responsibel for layout, locators, etc...
         job_search_page_modeled = JobSearchModel(job_search_page)
-        job_search_page_modeled.search_jobs_for_country(job_search_page_modeled, country, job_titles)
+        job_search_page_modeled.search_jobs_for_country(country, job_titles)
         # Wait
         job_search_page.wait_for_timeout(random.uniform(1,10))
 

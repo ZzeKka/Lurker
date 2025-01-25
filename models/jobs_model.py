@@ -1,5 +1,6 @@
 from models.page import Page
 import logging
+import random
 import time
 page_url = "https://www.linkedin.com/jobs/"
 
@@ -9,26 +10,28 @@ class JobSearchModel(Page):
         self.page_url = page_url
         self.country = None
         #locators
+        self.locator_search_job = None
+        self.locator_search_country = None
 
-    def search_jobs_for_country(self, current_page : Page, country_name :str, job_titles :tuple):
+    def search_jobs_for_country(self, country_name :str, job_titles :tuple):
         #try:
             self.country = country_name
             self.navigate()
-            print(self.country)
-            if self.country == 'Switzerland':
-                self.page.pause()
             # Visit the job search page for the country (LinkedIn job search interface)
-            for job_title in job_titles:                
-                # Search for the job title
-                   # search_box = self.page.locator()
-                # search_box.fill(job_title)
+            for job_title in job_titles: 
+                # Fill Search Parameters
+                self.locator_search_job = self.page.locator('input[role="combobox"][aria-label="Search by title, skill, or company"]')
+                self.locator_search_job.fill(job_title)
+                self.locator_search_country = self.page.locator('[role="combobox"][aria-label="City, state, or zip code"]')     
+                self.locator_search_country.fill(country_name)
+                self.page.wait_for_timeout(random.uniform(1,10))
+                self.locator_search_country.press("Enter")
+                
+                job_elements = self.page.locator("a[class*='job-card-container__link']")
+                #job_elements = self.page.locator("div[class*='job-card-container--clickable']")
+                job_elements.highlight()
+                self.page.pause()
                 """
-                # Select the location field and enter the country name
-                location_box = self.page.locator("input[placeholder='Search location']")
-                location_box.fill(country_name)
-                # Trigger the search by pressing 'Enter' or clicking the search button
-                search_box.press("Enter")
-                self.page.wait_for_load_state("networkidle", timeout=15000)
 
                 # Find all job elements listed
                 job_elements = self.page.locator("ul.jobs-search__results-list li")
