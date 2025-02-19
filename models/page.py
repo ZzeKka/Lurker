@@ -1,5 +1,6 @@
 from playwright.sync_api import TimeoutError
 import logging
+import random
 
 class Page:
     def __init__(self, page):
@@ -9,6 +10,7 @@ class Page:
     def navigate(self):
         """Navigate specific page to a current url"""
         try:
+            self.page.wait_for_timeout(random.uniform(4,6))
             self.page.goto(self.page_url)
             self.page.wait_for_load_state("domcontentloaded", timeout=50000)
             print('Successfully entered in page_url')

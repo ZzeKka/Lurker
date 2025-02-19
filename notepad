@@ -10,15 +10,12 @@ Decide to go sequently instead of concorrently to imitate human behavio  ur
 - Open them by country in individual page [x]
 
 Version 0.2
-- Get all links by scrolling down []
-- Open Links and analyze if they match some job info []
-- Store them in a file if they do []
+- Get all the data by scrolling down [x]
+- Build a custom class to store and order CV's by priority []
 
-------
-- Maybe add experience level to the search?[]
-- Send fast CVS
--- Auto complete most info []
-- Open Slow CVS links []
+
+** NOTE: Because of fear that my main account is banned, these program is on standby, I'm gonna start another project using linkedin API's
+
 
 
 

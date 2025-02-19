@@ -3,6 +3,8 @@ import random
 from playwright.sync_api import sync_playwright, Playwright, TimeoutError
 from models.login_model import LoginModel
 from models.jobs_model import JobSearchModel
+import logging
+import re
 
 linkedin_url = "https://www.linkedin.com/"
 used_application = [] 
@@ -13,8 +15,7 @@ job_titles = ("Python Developer","Software Developer")
 
 context_number = 0
 
-import logging
-import re
+
 
 def run(playwright: Playwright) -> None:
     chromium = playwright.chromium
@@ -38,6 +39,8 @@ def run(playwright: Playwright) -> None:
         job_search_page_modeled.search_jobs_for_country(country, job_titles)
         # Wait
         job_search_page.wait_for_timeout(random.uniform(1,10))
+
+        
 
 
       
